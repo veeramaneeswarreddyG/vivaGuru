@@ -1,0 +1,5 @@
+**/ .env
+backend/ .env
+.env
+**/__pycache__/
+backend/vivaguru.db
