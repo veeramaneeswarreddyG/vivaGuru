@@ -277,7 +277,7 @@ export default function App() {
     <div className="flex h-dvh w-screen overflow-hidden text-slate-800 dark:text-slate-100 animate-fade-in">
       
       {/* Background orbs */}
-      <AnimatedBackground />
+      <AnimatedBackground isChat={currentView === 'chat'} />
 
       {!user ? (
         <LoginScreen onLoginSuccess={handleLoginSuccess} />

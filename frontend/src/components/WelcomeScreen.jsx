@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
+import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut, Sparkles } from 'lucide-react';
 
 export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, userName = '', onSignOut }) {
   const [dragActive, setDragActive] = useState(false);
@@ -128,15 +128,26 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="mb-8"
+        className="mb-8 flex flex-col items-center"
       >
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-secondary to-indigo-500 bg-clip-text text-transparent mb-4">
+        <motion.div 
+          animate={{ 
+            rotate: [0, 8, -8, 0],
+            scale: [1, 1.05, 0.95, 1]
+          }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          className="mb-3 text-secondary dark:text-secondary-light p-2 bg-secondary/10 rounded-2xl shadow-inner"
+        >
+          <Sparkles className="w-8 h-8" />
+        </motion.div>
+
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-indigo-500 bg-clip-text text-transparent mb-3">
           VivaGuru
         </h1>
-        <p className="text-lg sm:text-xl md:text-2xl font-medium text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-200 max-w-2xl mx-auto leading-normal">
           Built for your next interview
         </p>
-        <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
+        <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-450 max-w-lg mx-auto mt-2 leading-relaxed">
           AI-powered interview preparation tailored to your role, skills, and experience level.
         </p>
       </motion.div>
@@ -153,14 +164,17 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           onDragOver={handleDrag}
           onDragLeave={handleDrag}
           onDrop={handleDrop}
-          className={`glass-premium p-6 sm:p-10 rounded-vivaguru border-2 border-dashed transition-all duration-300 relative ${
+          className={`glass-premium p-6 sm:p-10 rounded-vivaguru border transition-all duration-300 relative overflow-hidden ${
             dragActive 
-              ? 'border-primary bg-primary/5 shadow-xl scale-[1.02]' 
+              ? 'border-primary bg-primary/5 shadow-xl scale-[1.01]' 
               : status === 'error'
               ? 'border-danger/40 bg-danger/5'
-              : 'border-slate-300 dark:border-slate-700 hover:border-primary/50'
+              : 'border-slate-200/80 dark:border-darkbg-border/60 hover:border-[#8ab4f8]/50 shadow-xl'
           }`}
         >
+          {/* Top colored line like Google cards */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-[#34A853]" />
+
           <input
             ref={fileInputRef}
             type="file"
@@ -171,18 +185,18 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
 
           {status === 'empty' && (
             <div className="flex flex-col items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary dark:text-primary-light mb-4 shadow-inner">
-                <UploadCloud className="w-8 h-8" />
+              <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-[#4285f4]/15 flex items-center justify-center text-primary dark:text-[#8ab4f8] mb-4 shadow-inner">
+                <UploadCloud className="w-8 h-8 animate-pulse" />
               </div>
-              <p className="text-base font-semibold text-slate-800 dark:text-slate-200">
+              <p className="text-base font-bold text-slate-800 dark:text-slate-200">
                 Drag and drop your Job Description
               </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-5">
+              <p className="text-xs text-slate-450 dark:text-slate-500 mt-1.5 mb-5">
                 Supports PDF, DOCX, and TXT up to 10MB
               </p>
               <button
                 onClick={onButtonClick}
-                className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary-dark shadow-lg shadow-primary/20 transition-all duration-200 hover:scale-[1.02]"
+                className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark shadow-md shadow-primary/20 transition-all duration-200 hover:scale-[1.02] cursor-pointer"
               >
                 Browse Files
               </button>
@@ -194,22 +208,22 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
               <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center text-success mb-4">
                 <FileText className="w-8 h-8" />
               </div>
-              <p className="text-base font-semibold text-slate-800 dark:text-slate-200 truncate max-w-sm">
+              <p className="text-base font-bold text-slate-800 dark:text-slate-200 truncate max-w-sm">
                 {file.name}
               </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-6">
+              <p className="text-xs text-slate-450 dark:text-slate-500 mt-1 mb-6">
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setStatus('empty')}
-                  className="px-4 py-2 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-darkbg-hover transition-all duration-200"
+                  className="px-4 py-2 border border-slate-300 dark:border-darkbg-border text-slate-650 dark:text-slate-350 rounded-xl text-sm font-semibold hover:bg-slate-50 dark:hover:bg-darkbg-hover transition-all duration-200 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="px-5 py-2 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary-dark shadow-lg shadow-primary/20 transition-all duration-200 flex items-center gap-1 hover:scale-[1.02]"
+                  className="px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-md transition-all duration-200 flex items-center gap-1.5 hover:scale-[1.02] cursor-pointer"
                 >
                   Start AI Analysis
                   <ArrowRight className="w-4 h-4" />
@@ -219,11 +233,69 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           )}
 
           {status === 'uploading' && (
-            <div className="flex flex-col items-center justify-center py-6">
-              {/* Spinning/pulsing indicators handled in parent, show placeholder text here */}
-              <p className="text-slate-500 dark:text-slate-400 text-sm animate-pulse">
-                Initiating upload pipeline...
-              </p>
+            <div className="flex flex-col items-center justify-center py-6 space-y-4">
+              {/* Premium Google-style Animated Geometric Calibrator */}
+              <div className="relative w-20 h-20 mb-2 flex items-center justify-center">
+                {/* Rotating Outer Blue Orbit */}
+                <motion.svg
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+                  className="absolute w-20 h-20 text-primary/20 dark:text-primary-light/20"
+                  viewBox="0 0 100 100"
+                >
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="30 25" />
+                  <circle cx="94" cy="50" r="4.5" className="fill-[#4285F4] dark:fill-[#8ab4f8]" />
+                </motion.svg>
+
+                {/* Counter-rotating Inner Red/Yellow Orbit */}
+                <motion.svg
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
+                  className="absolute w-14 h-14 text-danger/25 dark:text-danger-light/20"
+                  viewBox="0 0 100 100"
+                >
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="20 20" />
+                  <circle cx="12" cy="50" r="4" className="fill-[#EA4335] dark:fill-[#f28b82]" />
+                </motion.svg>
+
+                {/* Staggered Green and Yellow Orbiting Dots */}
+                <motion.svg
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
+                  className="absolute w-20 h-20"
+                  viewBox="0 0 100 100"
+                >
+                  <circle cx="50" cy="6" r="4" className="fill-[#FBBC05] dark:fill-[#fdd663]" />
+                  <circle cx="50" cy="94" r="4" className="fill-[#34A853] dark:fill-[#81c995]" />
+                </motion.svg>
+
+                {/* Pulsing Central Gemini Purple Spark */}
+                <motion.div
+                  animate={{
+                    scale: [0.85, 1.15, 0.85],
+                    opacity: [0.75, 1, 0.75]
+                  }}
+                  transition={{
+                    duration: 1.6,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute text-secondary dark:text-secondary-light"
+                >
+                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C12 2 12 8 8 12C12 12 12 16 12 22C12 22 12 16 16 12C12 12 12 8 12 2Z" />
+                  </svg>
+                </motion.div>
+              </div>
+
+              <div className="text-center">
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                  Calibrating Profile
+                </p>
+                <p className="text-xs text-slate-450 dark:text-slate-500 mt-1 max-w-[280px] leading-relaxed animate-pulse">
+                  Extracting core roles and building readiness index...
+                </p>
+              </div>
             </div>
           )}
 

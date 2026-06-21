@@ -262,7 +262,7 @@ export default function ChatScreen({
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto px-3 py-3 sm:px-4 sm:py-6 relative overflow-hidden">
+    <div className="flex flex-col h-full max-w-4xl mx-auto px-3 py-3 sm:px-4 sm:py-6 relative overflow-hidden flex-grow">
       
       {/* Chat Header Bar */}
       <div className="flex items-center justify-between border-b border-slate-200 dark:border-darkbg-border/60 pb-3 mb-4 flex-shrink-0 select-none">
@@ -296,16 +296,17 @@ export default function ChatScreen({
             className="w-full max-w-2xl text-center space-y-6"
           >
             {/* Greeting */}
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
-              Hi{' '}
-              <span className="gradient-primary-text">
-                {userName || sessionData?.name || 'there'}
-              </span>
-              , what's on your mind?
-            </h2>
+            <div className="space-y-1 sm:space-y-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">
+                Hello, <span className="gradient-primary-text">{userName || 'there'}</span>.
+              </h2>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-slate-500 via-slate-650 to-slate-500 dark:from-slate-400 dark:via-slate-350 dark:to-slate-400 bg-clip-text text-transparent max-w-lg mx-auto leading-normal">
+                How would you like to calibrate your interview skills today?
+              </p>
+            </div>
 
             {/* Pill Search Input Bar */}
-            <motion.div layoutId="google-ai-search-bar" className="google-ai-input-wrapper shadow-2xl">
+            <motion.div layoutId="google-ai-search-bar" className="google-ai-input-wrapper shadow-2xl w-full max-w-xl mx-auto">
               <form
                 onSubmit={handleSubmit}
                 className="google-ai-input-inner bg-white dark:bg-[#1e1f20] flex items-center px-3 py-2 gap-2"
@@ -362,6 +363,44 @@ export default function ChatScreen({
                 </AnimatePresence>
               </form>
             </motion.div>
+
+            {/* Google AI style Suggestion Prompts */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl w-full mt-10 select-none">
+              {[
+                { text: "Simulate a mock behavioral round", desc: "Practice behavioral questions using the STAR method.", icon: GraduationCap, color: "text-[#4285F4]" },
+                { text: "Explain coding interview patterns", desc: "Overview of Sliding Window, Two Pointers, and DFS/BFS.", icon: Cpu, color: "text-[#a87ffb]" },
+                { text: "Help me analyze a target job description", desc: "Upload a PDF or paste text to calibrate preparation metrics.", icon: BookOpen, color: "text-[#34A853]" },
+                { text: "Give me tips for system design rounds", desc: "Best practices for scalability, databases, and rate limiting.", icon: Lightbulb, color: "text-[#FBBC05]" }
+              ].map((chip, idx) => {
+                const ChipIcon = chip.icon;
+                return (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ scale: 1.01, translateY: -2 }}
+                    onClick={() => {
+                      if (chip.text.includes("analyze")) {
+                        onNewSession(); // Redirects to Welcome upload page!
+                      } else {
+                        onSendMessage(chip.text);
+                      }
+                    }}
+                    className="glass-premium p-4 rounded-vivaguru border border-slate-200/50 dark:border-darkbg-border/50 hover:border-[#8ab4f8]/50 hover:bg-[#e9eef6]/30 dark:hover:bg-white/5 text-left transition-all duration-200 cursor-pointer shadow-md flex items-start gap-3 w-full"
+                  >
+                    <div className={`p-2 rounded-xl bg-slate-100 dark:bg-white/5 ${chip.color} flex-shrink-0 mt-0.5 shadow-inner`}>
+                      <ChipIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {chip.text}
+                      </h4>
+                      <p className="text-[10px] text-slate-455 dark:text-slate-500 mt-0.5 leading-normal">
+                        {chip.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </motion.div>
 
           {/* Voice Recognition Dialog */}
