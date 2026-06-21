@@ -9,7 +9,12 @@ import ChatScreen from './components/ChatScreen';
 import MockScreen from './components/MockScreen';
 import ReviewScreen from './components/ReviewScreen';
 import ErrorBoundary from './components/ErrorBoundary';
-
+import LoginScreen from './components/LoginScreen';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Menu, Plus, Sun, Moon, MessageSquare, 
+  GraduationCap, CheckSquare, BookOpen, Settings, LogOut
+} from 'lucide-react';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -26,6 +31,35 @@ export default function App() {
   const [chatLoading, setChatLoading] = useState(false);
   const [chatLoadingMsg, setChatLoadingMsg] = useState('Thinking...');
   const [userName, setUserName] = useState(() => localStorage.getItem('vivaGuru_userName') || '');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [user, setUser] = useState(() => {
+    try {
+      const u = localStorage.getItem('vivaGuru_user');
+      return u ? JSON.parse(u) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    localStorage.setItem('vivaGuru_user', JSON.stringify(userData));
+    setUserName(userData.username);
+    localStorage.setItem('vivaGuru_userName', userData.username);
+    setCurrentView('welcome');
+  };
+
+  const handleSignOut = () => {
+    setUser(null);
+    localStorage.removeItem('vivaGuru_user');
+    localStorage.removeItem('vivaGuru_userName');
+    setUserName('');
+    setSessionData(null);
+    setRecommendations(null);
+    setMessages([]);
+    setMobileSidebarOpen(false);
+    setCurrentView('welcome');
+  };
 
   // Theme configuration
   useEffect(() => {
@@ -231,74 +265,216 @@ export default function App() {
       setCurrentView('difficulty');
     }
   };
+  const mobileMenuItems = [
+    { id: 'chat', label: 'Chat', icon: MessageSquare },
+    { id: 'mock', label: 'Mock', icon: GraduationCap },
+    { id: 'review', label: 'Review', icon: CheckSquare },
+    { id: 'dashboard', label: 'Dashboard', icon: BookOpen },
+    { id: 'difficulty', label: 'Calibrate', icon: Settings },
+  ];
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden text-slate-800 dark:text-slate-100">
+    <div className="flex h-dvh w-screen overflow-hidden text-slate-800 dark:text-slate-100 animate-fade-in">
       
       {/* Background orbs */}
       <AnimatedBackground />
 
-      {/* Sidebar (Render only if session exists and not loading welcome/analysis) */}
-      {sessionData && currentView !== 'welcome' && currentView !== 'analysis' && (
-        <Sidebar
-          currentView={currentView}
-          onViewChange={setCurrentView}
-          theme={theme}
-          toggleTheme={toggleTheme}
-          onNewSession={handleNewSession}
-          sessionsList={sessionsList}
-          onLoadSession={handleLoadSession}
-        />
-      )}
-
-      {/* Main View Area */}
-      <main className="flex-1 h-screen overflow-y-auto relative">
-        <ErrorBoundary>
-          {currentView === 'welcome' && (
-            <WelcomeScreen 
-              onUploadSuccess={handleUploadSuccess} 
-              onContinueWithoutPDF={handleContinueWithoutPDF}
-            />
-          )}
-          
-          {currentView === 'analysis' && <AnalysisScreen />}
-
-          {currentView === 'dashboard' && sessionData && (
-            <DashboardScreen 
-              sessionData={sessionData} 
-              recommendations={recommendations}
-              onProceed={handleDashboardProceed}
-            />
-          )}
-
-          {currentView === 'difficulty' && sessionData && (
-            <DifficultySelector
-              currentDifficulty={sessionData.difficulty}
-              onSelect={handleSelectDifficulty}
-            />
-          )}
-
-          {currentView === 'chat' && sessionData && (
-            <ChatScreen
-              sessionData={sessionData}
-              messages={messages}
-              onSendMessage={handleSendMessage}
-              isLoading={chatLoading}
-              loadingMessage={chatLoadingMsg}
+      {!user ? (
+        <LoginScreen onLoginSuccess={handleLoginSuccess} />
+      ) : (
+        <>
+          {/* Sidebar (Render only if session exists and not loading welcome/analysis) */}
+          {sessionData && currentView !== 'welcome' && currentView !== 'analysis' && (
+            <Sidebar
+              currentView={currentView}
+              onViewChange={setCurrentView}
+              theme={theme}
+              toggleTheme={toggleTheme}
               onNewSession={handleNewSession}
-              userName={userName}
+              sessionsList={sessionsList}
+              onLoadSession={handleLoadSession}
+              user={user}
+              onSignOut={handleSignOut}
             />
           )}
 
-          {currentView === 'mock' && sessionData && (
-            <MockScreen sessionData={sessionData} />
-          )}
+          {/* Mobile sliding Sidebar drawer */}
+          <AnimatePresence>
+            {mobileSidebarOpen && sessionData && currentView !== 'welcome' && currentView !== 'analysis' && (
+              <div className="fixed inset-0 z-50 md:hidden flex">
+                {/* Backdrop overlay */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setMobileSidebarOpen(false)}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+                />
 
-          {currentView === 'review' && sessionData && (
-            <ReviewScreen sessionData={sessionData} recommendations={recommendations} />
-          )}
-        </ErrorBoundary>
-      </main>
+                {/* Drawer container */}
+                <motion.div
+                  initial={{ x: '-100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '-100%' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                  className="relative w-72 h-full bg-[#f6f8fc] dark:bg-darkbg flex flex-col shadow-2xl z-10"
+                >
+                  <Sidebar
+                    currentView={currentView}
+                    onViewChange={(view) => {
+                      setCurrentView(view);
+                      setMobileSidebarOpen(false);
+                    }}
+                    theme={theme}
+                    toggleTheme={toggleTheme}
+                    onNewSession={() => {
+                      handleNewSession();
+                      setMobileSidebarOpen(false);
+                    }}
+                    sessionsList={sessionsList}
+                    onLoadSession={(sid) => {
+                      handleLoadSession(sid);
+                      setMobileSidebarOpen(false);
+                    }}
+                    isMobile={true}
+                    onClose={() => setMobileSidebarOpen(false)}
+                    user={user}
+                    onSignOut={handleSignOut}
+                  />
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Right Pane container */}
+          <div className="flex-grow flex flex-col h-full overflow-hidden relative">
+            
+            {/* Mobile Top Header */}
+            {sessionData && currentView !== 'welcome' && currentView !== 'analysis' && (
+              <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#f6f8fc] dark:bg-darkbg border-b border-slate-200 dark:border-darkbg-border/60 z-30 select-none">
+                <div className="flex items-center gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setMobileSidebarOpen(true)}
+                    className="p-1.5 rounded-xl bg-[#e9eef6] dark:bg-darkbg-hover hover:bg-[#dadce0] dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors cursor-pointer"
+                  >
+                    <Menu className="w-5 h-5" />
+                  </button>
+                  <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-md bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-extrabold text-[10px]">
+                      VG
+                    </span>
+                    VivaGuru
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleNewSession}
+                    title="New Chat Session"
+                    className="p-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary dark:text-primary-light transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-4.5 h-4.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="p-2 rounded-xl bg-[#e9eef6] dark:bg-darkbg-hover hover:bg-[#dadce0] dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors cursor-pointer"
+                  >
+                    {theme === 'dark' ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    title="Sign Out"
+                    className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-4.5 h-4.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Main View Area */}
+            <main className={`flex-1 relative ${currentView === 'chat' ? 'h-full overflow-hidden' : 'overflow-y-auto'}`}>
+              <ErrorBoundary>
+                {currentView === 'welcome' && (
+                  <WelcomeScreen 
+                    onUploadSuccess={handleUploadSuccess} 
+                    onContinueWithoutPDF={handleContinueWithoutPDF}
+                    userName={userName}
+                    onSignOut={handleSignOut}
+                  />
+                )}
+                
+                {currentView === 'analysis' && <AnalysisScreen />}
+
+                {currentView === 'dashboard' && sessionData && (
+                  <DashboardScreen 
+                    sessionData={sessionData} 
+                    recommendations={recommendations}
+                    onProceed={handleDashboardProceed}
+                  />
+                )}
+
+                {currentView === 'difficulty' && sessionData && (
+                  <DifficultySelector
+                    currentDifficulty={sessionData.difficulty}
+                    onSelect={handleSelectDifficulty}
+                  />
+                )}
+
+                {currentView === 'chat' && sessionData && (
+                  <ChatScreen
+                    sessionData={sessionData}
+                    messages={messages}
+                    onSendMessage={handleSendMessage}
+                    isLoading={chatLoading}
+                    loadingMessage={chatLoadingMsg}
+                    onNewSession={handleNewSession}
+                    userName={userName}
+                  />
+                )}
+
+                {currentView === 'mock' && sessionData && (
+                  <MockScreen sessionData={sessionData} />
+                )}
+
+                {currentView === 'review' && sessionData && (
+                  <ReviewScreen sessionData={sessionData} recommendations={recommendations} />
+                )}
+              </ErrorBoundary>
+            </main>
+
+            {/* Mobile Bottom Navigation Bar */}
+            {sessionData && currentView !== 'welcome' && currentView !== 'analysis' && (
+              <div className="md:hidden flex items-center justify-around bg-[#f6f8fc] dark:bg-darkbg border-t border-slate-200 dark:border-darkbg-border/60 py-2.5 px-1 z-30 select-none">
+                {mobileMenuItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentView === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setCurrentView(item.id)}
+                      className={`flex flex-col items-center gap-1.5 py-1 px-3 rounded-xl transition-all duration-150 cursor-pointer ${
+                        isActive 
+                          ? 'text-primary dark:text-primary-light font-semibold scale-105' 
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="text-[9px] font-bold tracking-tight uppercase">
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
     </div>
   );

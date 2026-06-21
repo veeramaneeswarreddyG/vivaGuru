@@ -29,7 +29,7 @@ export default function DashboardScreen({ sessionData, recommendations, onProcee
   const strokeDashoffset = circ - (animatedScore / 100) * circ;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 py-8 select-none">
+    <div className="max-w-[1200px] mx-auto px-4 py-6 sm:px-6 sm:py-8 select-none">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200 dark:border-darkbg-border">

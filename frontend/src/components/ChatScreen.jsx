@@ -262,7 +262,7 @@ export default function ChatScreen({
   ];
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto px-4 py-6 relative">
+    <div className="flex flex-col h-full max-w-4xl mx-auto px-3 py-3 sm:px-4 sm:py-6 relative overflow-hidden">
       
       {/* Chat Header Bar */}
       <div className="flex items-center justify-between border-b border-slate-200 dark:border-darkbg-border/60 pb-3 mb-4 flex-shrink-0 select-none">
@@ -279,251 +279,333 @@ export default function ChatScreen({
           type="button"
           onClick={onNewSession}
           title="Start New Session"
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-darkbg-border text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-[#e9eef6] dark:hover:bg-darkbg-hover text-xs font-semibold transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-darkbg-border text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-[#e9eef6] dark:hover:bg-darkbg-hover text-xs font-semibold transition-all duration-200 active:scale-95 cursor-pointer shadow-sm animate-pulse"
         >
           <Plus className="w-3.5 h-3.5 text-primary dark:text-primary-light" />
           <span>New Chat</span>
         </button>
       </div>
 
-      {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto pr-2 mb-4 space-y-8 pb-32">
-        {messages.length === 0 ? (
-          <div className="h-full" />
-        ) : (
-          messages.map((msg, index) => {
-            const isUser = msg.role === 'user';
-            
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
+      {messages.length === 0 && !isLoading ? (
+        /* Empty State: Centered Greeting & Pill Input Bar */
+        <div className="flex-1 flex flex-col items-center justify-center px-2 pb-16 sm:pb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-w-2xl text-center space-y-6"
+          >
+            {/* Greeting */}
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+              Hi{' '}
+              <span className="gradient-primary-text">
+                {userName || sessionData?.name || 'there'}
+              </span>
+              , what's on your mind?
+            </h2>
+
+            {/* Pill Search Input Bar */}
+            <motion.div layoutId="google-ai-search-bar" className="google-ai-input-wrapper shadow-2xl">
+              <form
+                onSubmit={handleSubmit}
+                className="google-ai-input-inner bg-white dark:bg-[#1e1f20] flex items-center px-3 py-2 gap-2"
               >
-                {!isUser && (
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mt-1">
-                    VG
-                  </div>
-                )}
-                
-                <div className={`max-w-[85%] ${isUser ? 'bg-primary text-white rounded-2xl px-4 py-3 shadow-md' : 'w-full'}`}>
-                  {isUser ? (
-                    <p className="text-sm font-medium whitespace-pre-wrap leading-relaxed">
-                      {msg.content}
-                    </p>
-                  ) : typeof msg.content === 'string' ? (
-                    <div className="text-sm leading-relaxed text-slate-800 dark:text-slate-200 glass p-4 rounded-xl shadow-md border border-slate-200/50 dark:border-darkbg-border/50 bg-white dark:bg-darkbg-card">
-                      {renderMarkdown(msg.content)}
-                    </div>
-                  ) : (
+                {/* + Button (left) */}
+                <button
+                  type="button"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-slate-300 transition-all duration-200 cursor-pointer"
+                  title="Attach or add"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
 
-                    // AI Response Structured Layout (Lighter, user-friendly ChatGPT/Gemini style)
-                    <div className="glass-premium p-6 rounded-2xl border border-slate-200/60 dark:border-darkbg-border/60 bg-white/70 dark:bg-darkbg-card/70 backdrop-blur-xl shadow-xl space-y-6">
-                      
-                      {/* Header block inside bubble */}
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-darkbg-border/50 pb-3">
-                        <h4 className="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-                          {msg.content?.title || 'Mentor Response'}
-                        </h4>
-                        {msg.difficulty && (
-                          <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light tracking-wider">
-                            {msg.difficulty} Depth
-                          </span>
-                        )}
-                      </div>
+                {/* Textarea (center) */}
+                <textarea
+                  ref={textareaRef}
+                  rows={1}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask anything"
+                  className="flex-grow bg-transparent border-0 outline-none focus:ring-0 text-sm py-1.5 px-1 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-500 resize-none max-h-40 min-h-[36px] leading-relaxed"
+                />
 
-                      {/* Content block: Accordion Cards (VDL Progressive Disclosure style) */}
-                      <div className="space-y-3">
-                        {sectionConfig.map((sec) => {
-                          const contentText = msg.content?.[sec.key];
-                          if (!contentText) return null;
+                {/* Mic Button (right) */}
+                <button
+                  type="button"
+                  onClick={() => setShowVoice(!showVoice)}
+                  className={`flex-shrink-0 p-2 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer ${
+                    showVoice
+                      ? 'text-[#4285f4] dark:text-[#8ab4f8]'
+                      : 'text-slate-500 dark:text-slate-400'
+                  }`}
+                  title="Voice input"
+                >
+                  <Mic className="w-5 h-5" />
+                </button>
 
-                          return (
-                            <SectionAccordion
-                              key={sec.key}
-                              sec={sec}
-                              contentText={contentText}
-                              renderMarkdown={renderMarkdown}
-                            />
-                          );
-                        })}
-                      </div>
+                {/* Send Button */}
+                <AnimatePresence>
+                  {inputValue.trim() && (
+                    <motion.button
+                      type="submit"
+                      initial={{ opacity: 0, scale: 0.7 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.7 }}
+                      transition={{ duration: 0.18 }}
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-[#4285f4] hover:bg-[#3367d6] flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                      title="Send"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </form>
+            </motion.div>
+          </motion.div>
 
-                      {/* Dynamic Follow-up Suggestions */}
-                      {Array.isArray(msg.follow_ups) && msg.follow_ups.length > 0 && (
-                        <div className="pt-4 border-t border-slate-100 dark:border-darkbg-border/50">
-                          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">
-                            Explore Further
-                          </span>
-                          <div className="flex flex-wrap gap-2">
-                            {msg.follow_ups.map((followQ, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => onSendMessage(followQ)}
-                                className="text-xs px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-[#e9eef6] dark:bg-darkbg-card border border-slate-200 dark:border-darkbg-border text-slate-600 dark:text-slate-350 font-medium hover:border-primary/40 hover:text-primary dark:hover:text-primary-light hover:shadow-sm transition-all duration-200 text-left cursor-pointer"
-                              >
-                                {followQ}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+          {/* Voice Recognition Dialog */}
+          <AnimatePresence>
+            {showVoice && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                className="glass-premium max-w-sm w-full mx-auto rounded-vivaguru p-5 shadow-2xl mt-6 border border-primary/10"
+              >
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Voice Dictation
+                  </h4>
+                  <button
+                    onClick={() => setShowVoice(false)}
+                    className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+                <VoiceVisualizer onTranscript={handleVoiceTranscript} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ) : (
+        /* Active State: Message List + Bottom Input Bar */
+        <div className="flex-1 flex flex-col min-h-0 relative">
+          {/* Messages Scroll Area */}
+          <div className="flex-1 overflow-y-auto pr-2 space-y-8 pb-36">
+            {messages.map((msg, index) => {
+              const isUser = msg.role === 'user';
+              
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className={`flex gap-3 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
+                >
+                  {!isUser && (
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mt-1">
+                      VG
                     </div>
                   )}
-                </div>
-                
-                {isUser && (
-                  <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-darkbg-hover flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold text-xs flex-shrink-0 mt-1 shadow-inner">
-                    U
+                  
+                  <div className={`${isUser ? 'max-w-[90%] sm:max-w-[85%] bg-primary text-white rounded-2xl px-4 py-3 shadow-md' : 'w-full'}`}>
+                    {isUser ? (
+                      <p className="text-sm font-medium whitespace-pre-wrap leading-relaxed">
+                        {msg.content}
+                      </p>
+                    ) : typeof msg.content === 'string' ? (
+                      <div className="text-sm leading-relaxed text-slate-800 dark:text-slate-200 glass p-4 rounded-xl shadow-md border border-slate-200/50 dark:border-darkbg-border/50 bg-white dark:bg-darkbg-card">
+                        {renderMarkdown(msg.content)}
+                      </div>
+                    ) : (
+                      // AI Response Structured Layout
+                      <div className="glass-premium p-4 sm:p-6 rounded-2xl border border-slate-200/60 dark:border-darkbg-border/60 bg-white/70 dark:bg-darkbg-card/70 backdrop-blur-xl shadow-xl space-y-6">
+                        
+                        {/* Header block inside bubble */}
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-darkbg-border/50 pb-3">
+                          <h4 className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+                            {msg.content?.title || 'AI Response'}
+                          </h4>
+                          {msg.difficulty && (
+                            <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light tracking-wider">
+                              {msg.difficulty} Depth
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content block: Accordion Cards */}
+                        <div className="space-y-3">
+                          {sectionConfig.map((sec) => {
+                            const contentText = msg.content?.[sec.key];
+                            if (!contentText) return null;
+
+                            return (
+                              <SectionAccordion
+                                key={sec.key}
+                                sec={sec}
+                                contentText={contentText}
+                                renderMarkdown={renderMarkdown}
+                              />
+                            );
+                          })}
+                        </div>
+
+                        {/* Dynamic Follow-up Suggestions */}
+                        {Array.isArray(msg.follow_ups) && msg.follow_ups.length > 0 && (
+                          <div className="pt-4 border-t border-slate-100 dark:border-darkbg-border/50">
+                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">
+                              Explore Further
+                            </span>
+                            <div className="flex flex-wrap gap-2">
+                              {msg.follow_ups.map((followQ, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => onSendMessage(followQ)}
+                                  className="text-xs px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-[#e9eef6] dark:bg-darkbg-card border border-slate-200 dark:border-darkbg-border text-slate-600 dark:text-slate-355 font-medium hover:border-primary/40 hover:text-primary dark:hover:text-primary-light hover:shadow-sm transition-all duration-200 text-left cursor-pointer"
+                                >
+                                  {followQ}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                )}
-              </motion.div>
-            );
-          })
-        )}
+                  
+                  {isUser && (
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 dark:bg-darkbg-hover flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold text-xs flex-shrink-0 mt-1 shadow-inner">
+                      U
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
 
-        {/* Google AI Thinking Bubble */}
-        <AnimatePresence>
-          {isLoading && (
-            <motion.div
-              initial={{ opacity: 0, y: 14, scale: 0.92 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, y: 8 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="flex gap-3 justify-start items-end"
-            >
-              {/* VG Avatar */}
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mb-0.5">
-                VG
-              </div>
-
-              {/* Google AI style leaf-shaped thinking bubble */}
-              <div className="google-ai-thinking-wrapper">
-                <div className="google-ai-thinking-inner bg-[#f0f4f9] dark:bg-[#1e1f20]">
-                  <span className="ai-dot" />
-                  <span className="ai-dot" />
-                  <span className="ai-dot" />
+          {/* Google AI Thinking Bubble */}
+          <AnimatePresence>
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 14, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, y: 8 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="flex gap-3 justify-start items-end absolute bottom-24 left-0 z-10"
+              >
+                {/* VG Avatar */}
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mb-0.5">
+                  VG
                 </div>
+
+                {/* Google AI style leaf-shaped thinking bubble */}
+                <div className="google-ai-thinking-wrapper">
+                  <div className="google-ai-thinking-inner bg-[#f0f4f9] dark:bg-[#1e1f20]">
+                    <span className="ai-dot" />
+                    <span className="ai-dot" />
+                    <span className="ai-dot" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div ref={messagesEndRef} />
+
+          {/* Voice Recognition Dialog overlay (absolute at bottom when active) */}
+          <AnimatePresence>
+            {showVoice && (
+              <div className="absolute bottom-20 left-4 right-4 bg-transparent z-20">
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                  className="glass-premium max-w-sm mx-auto rounded-vivaguru p-5 shadow-2xl border border-primary/10"
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                      Voice Dictation
+                    </h4>
+                    <button
+                      onClick={() => setShowVoice(false)}
+                      className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <VoiceVisualizer onTranscript={handleVoiceTranscript} />
+                </motion.div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
 
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input Form at Bottom — Google AI style */}
-      <div className="absolute bottom-6 left-4 right-4 bg-transparent select-none z-10">
-
-        {/* Personalized greeting — shown only when no messages */}
-        <AnimatePresence>
-          {messages.length === 0 && !isLoading && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.45 }}
-              className="text-center mb-5 select-none"
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-                Hi{' '}
-                <span className="gradient-primary-text">
-                  {userName || sessionData?.name || 'there'}
-                </span>
-                , what's on your mind?
-              </h2>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Voice Recognition Dialog */}
-        <AnimatePresence>
-          {showVoice && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="glass-premium max-w-sm mx-auto rounded-vivaguru p-5 shadow-2xl mb-4 border border-primary/10"
-            >
-              <div className="flex justify-between items-center mb-3">
-                <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                  Voice Dictation
-                </h4>
+          {/* Input Form at Bottom — Google AI style */}
+          <div className="absolute bottom-4 left-2 right-2 sm:bottom-6 sm:left-4 sm:right-4 bg-transparent select-none z-10">
+            <motion.div layoutId="google-ai-search-bar" className="google-ai-input-wrapper shadow-2xl">
+              <form
+                onSubmit={handleSubmit}
+                className="google-ai-input-inner bg-white dark:bg-[#1e1f20] flex items-center px-3 py-2 gap-2"
+              >
+                {/* + Button (left) */}
                 <button
-                  onClick={() => setShowVoice(false)}
-                  className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  type="button"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-slate-300 transition-all duration-200 cursor-pointer"
+                  title="Attach or add"
                 >
-                  Close
+                  <Plus className="w-4 h-4" />
                 </button>
-              </div>
-              <VoiceVisualizer onTranscript={handleVoiceTranscript} />
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* Google AI Pill Search Input Bar */}
-        <div className="google-ai-input-wrapper shadow-2xl">
-          <form
-            onSubmit={handleSubmit}
-            className="google-ai-input-inner bg-white dark:bg-[#1e1f20] flex items-center px-3 py-2 gap-2"
-          >
-            {/* + Button (left) */}
-            <button
-              type="button"
-              className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-slate-300 transition-all duration-200 cursor-pointer"
-              title="Attach or add"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-
-            {/* Textarea (center) */}
-            <textarea
-              ref={textareaRef}
-              rows={1}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask anything"
-              className="flex-grow bg-transparent border-0 outline-none focus:ring-0 text-sm py-1.5 px-1 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-500 resize-none max-h-40 min-h-[36px] leading-relaxed"
-              disabled={isLoading}
-            />
-
-            {/* Mic Button (right) */}
-            <button
-              type="button"
-              onClick={() => setShowVoice(!showVoice)}
-              className={`flex-shrink-0 p-2 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer ${
-                showVoice
-                  ? 'text-[#4285f4] dark:text-[#8ab4f8]'
-                  : 'text-slate-500 dark:text-slate-400'
-              }`}
-              title="Voice input"
-            >
-              <Mic className="w-5 h-5" />
-            </button>
-
-            {/* Send Button — only shown when input has text */}
-            <AnimatePresence>
-              {inputValue.trim() && (
-                <motion.button
-                  type="submit"
-                  initial={{ opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  transition={{ duration: 0.18 }}
+                {/* Textarea (center) */}
+                <textarea
+                  ref={textareaRef}
+                  rows={1}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask anything"
+                  className="flex-grow bg-transparent border-0 outline-none focus:ring-0 text-sm py-1.5 px-1 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-500 resize-none max-h-40 min-h-[36px] leading-relaxed"
                   disabled={isLoading}
-                  className="flex-shrink-0 w-8 h-8 rounded-full bg-[#4285f4] hover:bg-[#3367d6] disabled:bg-slate-300 dark:disabled:bg-slate-700 flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
-                  title="Send"
+                />
+
+                {/* Mic Button (right) */}
+                <button
+                  type="button"
+                  onClick={() => setShowVoice(!showVoice)}
+                  className={`flex-shrink-0 p-2 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer ${
+                    showVoice
+                      ? 'text-[#4285f4] dark:text-[#8ab4f8]'
+                      : 'text-slate-500 dark:text-slate-400'
+                  }`}
+                  title="Voice input"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </form>
+                  <Mic className="w-5 h-5" />
+                </button>
+
+                {/* Send Button — only shown when input has text */}
+                <AnimatePresence>
+                  {inputValue.trim() && (
+                    <motion.button
+                      type="submit"
+                      initial={{ opacity: 0, scale: 0.7 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.7 }}
+                      transition={{ duration: 0.18 }}
+                      disabled={isLoading}
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-[#4285f4] hover:bg-[#3367d6] disabled:bg-slate-300 dark:disabled:bg-slate-700 flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                      title="Send"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </form>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      )}
 
     </div>
   );

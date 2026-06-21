@@ -134,7 +134,7 @@ export default function MockScreen({ sessionData }) {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            className="gradient-border-card p-8 rounded-vivaguru glass shadow-xl text-center max-w-xl mx-auto py-12"
+            className="gradient-border-card p-5 sm:p-8 rounded-vivaguru glass shadow-xl text-center max-w-xl mx-auto py-8 sm:py-12"
           >
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-lg">
               VG
@@ -177,31 +177,32 @@ export default function MockScreen({ sessionData }) {
             </div>
 
             {/* Answer Box */}
-            <div className="relative">
+            <div className="rounded-vivaguru border border-slate-200 dark:border-[#2e3032] overflow-hidden flex flex-col bg-white/70 dark:bg-[#1e1f20]/75 backdrop-blur-xl shadow-lg focus-within:ring-1 focus-within:ring-primary/45 focus-within:border-primary/45">
               <textarea
                 value={answerText}
                 onChange={(e) => setAnswerText(e.target.value)}
                 placeholder="Type or speak your answer here..."
                 rows={5}
-                className="w-full rounded-vivaguru glass-premium p-4 outline-none border border-slate-300/60 dark:border-white/5 text-sm leading-relaxed text-slate-800 dark:text-slate-100 resize-none shadow-lg focus:ring-1 focus:ring-primary/40 focus:border-primary/40"
+                className="w-full p-4 bg-transparent outline-none border-0 text-sm leading-relaxed text-slate-800 dark:text-slate-100 resize-none placeholder-slate-500"
               />
               
-              <div className="absolute bottom-4 right-4 flex items-center gap-2">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200/50 dark:border-[#2e3032]/60 bg-slate-50/50 dark:bg-[#1e1f20]/30">
                 <button
                   type="button"
                   onClick={() => setShowVoice(!showVoice)}
-                  className={`p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-darkbg-hover transition-colors ${
-                    showVoice ? 'text-primary' : 'text-slate-400 hover:text-slate-600'
+                  className={`p-2 rounded-lg hover:bg-[#e9eef6] dark:hover:bg-darkbg-hover transition-colors cursor-pointer ${
+                    showVoice ? 'text-primary' : 'text-slate-450 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
                   }`}
+                  title="Voice input"
                 >
                   <Mic className="w-5 h-5" />
                 </button>
                 <button
                   onClick={submitAnswer}
                   disabled={!answerText.trim()}
-                  className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-lg text-xs font-semibold shadow-md transition-all duration-200 hover:scale-[1.02] flex items-center gap-1 cursor-pointer"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-455 dark:disabled:text-slate-500 text-white rounded-xl text-xs font-semibold shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center gap-1.5 cursor-pointer"
                 >
-                  Submit Answer
+                  <span>Submit Answer</span>
                   <Send className="w-3.5 h-3.5" />
                 </button>
               </div>

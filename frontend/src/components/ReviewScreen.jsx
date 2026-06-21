@@ -110,49 +110,54 @@ export default function ReviewScreen({ sessionData, recommendations }) {
             </div>
 
             {/* Answer Text Area */}
-            <div className="space-y-1.5 relative">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
                 Your Response
               </label>
-              <textarea
-                value={answerText}
-                onChange={(e) => setAnswerText(e.target.value)}
-                placeholder="Write or speak your answer details here..."
-                rows={6}
-                className="w-full rounded-xl bg-slate-50 dark:bg-darkbg-card p-4 border border-slate-300/60 dark:border-white/5 text-sm leading-relaxed text-slate-800 dark:text-slate-100 resize-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 pb-12"
-              />
               
-              <div className="absolute bottom-4 right-4 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowVoice(!showVoice)}
-                  className={`p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-darkbg-hover transition-colors ${
-                    showVoice ? 'text-primary' : 'text-slate-400 hover:text-slate-600'
-                  }`}
-                >
-                  <Mic className="w-5 h-5" />
-                </button>
+              <div className="rounded-xl border border-slate-300/60 dark:border-white/5 overflow-hidden flex flex-col bg-slate-50 dark:bg-darkbg-card shadow-sm focus-within:ring-1 focus-within:ring-primary/40 focus-within:border-primary/40">
+                <textarea
+                  value={answerText}
+                  onChange={(e) => setAnswerText(e.target.value)}
+                  placeholder="Write or speak your answer details here..."
+                  rows={6}
+                  className="w-full p-4 bg-transparent outline-none border-0 text-sm leading-relaxed text-slate-800 dark:text-slate-100 resize-none placeholder-slate-400 dark:placeholder-slate-550 focus:ring-0"
+                />
+                
+                <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200/50 dark:border-darkbg-border/50 bg-slate-100/40 dark:bg-darkbg-card/30">
+                  <button
+                    type="button"
+                    onClick={() => setShowVoice(!showVoice)}
+                    className={`p-2 rounded-lg hover:bg-slate-200/60 dark:hover:bg-darkbg-hover transition-colors cursor-pointer ${
+                      showVoice ? 'text-primary' : 'text-slate-400 hover:text-slate-600'
+                    }`}
+                    title="Voice input"
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                  
+                  <div className="flex items-center gap-3">
+                    {evaluation && (
+                      <button
+                        type="button"
+                        onClick={() => { setQuestion(''); setAnswerText(''); setEvaluation(null); }}
+                        className="px-4 py-2 border border-slate-300 dark:border-darkbg-border text-slate-600 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-100 dark:hover:bg-darkbg-hover transition-all cursor-pointer"
+                      >
+                        Clear
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleReview}
+                      disabled={!question.trim() || !answerText.trim() || isLoading}
+                      className="px-5 py-2 bg-primary hover:bg-primary-dark disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-550 text-white rounded-xl text-xs font-semibold shadow-md transition-all duration-200 hover:scale-[1.01] active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <span>{isLoading ? 'Analyzing...' : 'Evaluate Answer'}</span>
+                      <Send className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-3 pt-2">
-              {evaluation && (
-                <button
-                  onClick={() => { setQuestion(''); setAnswerText(''); setEvaluation(null); }}
-                  className="px-4 py-2.5 border border-slate-300 dark:border-darkbg-border text-slate-600 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-darkbg-hover transition-all"
-                >
-                  Clear Fields
-                </button>
-              )}
-              <button
-                onClick={handleReview}
-                disabled={!question.trim() || !answerText.trim() || isLoading}
-                className="px-6 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-primary/20 hover:scale-[1.01] transition-all duration-200 active:scale-95 inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                {isLoading ? 'Analyzing...' : 'Evaluate Answer'}
-                <Send className="w-3.5 h-3.5" />
-              </button>
             </div>
 
             {/* Voice Dictation overlay */}

@@ -262,5 +262,36 @@ def review_answer():
     evaluation = nlp.evaluate_answer(question, answer)
     return jsonify(evaluation)
 
+@app.route("/api/auth/register", methods=["POST"])
+def auth_register():
+    payload = request.json or {}
+    email = payload.get("email")
+    username = payload.get("username")
+    password = payload.get("password")
+    
+    if not email or not username or not password:
+        return jsonify({"error": "Missing parameters"}), 400
+        
+    success = db.create_user(email, username, password)
+    if success:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"error": "Email is already registered"}), 400
+
+@app.route("/api/auth/login", methods=["POST"])
+def auth_login():
+    payload = request.json or {}
+    email = payload.get("email")
+    password = payload.get("password")
+    
+    if not email or not password:
+        return jsonify({"error": "Missing parameters"}), 400
+        
+    user = db.authenticate_user(email, password)
+    if user:
+        return jsonify({"success": True, "user": user})
+    else:
+        return jsonify({"error": "Invalid email or password"}), 401
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8000, debug=True)

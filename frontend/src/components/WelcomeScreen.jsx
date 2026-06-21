@@ -1,13 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UploadCloud, FileText, ArrowRight, AlertCircle } from 'lucide-react';
+import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
 
-export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF }) {
+export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, userName = '', onSignOut }) {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('empty'); // empty, selected, uploading, error
   const [errorMessage, setErrorMessage] = useState('');
-  const [userName, setUserName] = useState('');
   
   const fileInputRef = useRef(null);
 
@@ -96,46 +95,50 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF })
   };
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-4xl mx-auto min-h-[80vh] px-6 text-center select-none">
+    <div className="flex flex-col items-center justify-center max-w-4xl mx-auto min-h-[80vh] px-4 py-8 pt-16 sm:pt-20 sm:px-6 text-center select-none relative w-full">
       
+      {/* Top Header inside WelcomeScreen */}
+      <div className="absolute top-0 left-0 right-0 flex items-center justify-between w-full z-10 px-4 py-3 select-none">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-sm shadow-md">
+            VG
+          </div>
+          <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100">
+            VivaGuru
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 hidden sm:inline">
+            Active Profile: <span className="text-slate-850 dark:text-slate-200 font-bold">{userName}</span>
+          </span>
+          {onSignOut && (
+            <button
+              onClick={onSignOut}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-350 dark:border-darkbg-border hover:bg-slate-100 dark:hover:bg-darkbg-hover rounded-xl text-xs font-bold text-red-500 dark:text-red-400 transition-all cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5 text-red-500" />
+              <span>Sign Out</span>
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="mb-10"
+        className="mb-8"
       >
-        <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-primary dark:text-primary-light mb-3 bg-primary/10 dark:bg-primary/20 px-3 py-1 rounded-full">
-          AI Interview Mentor
-        </span>
-        <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-secondary to-indigo-500 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-secondary to-indigo-500 bg-clip-text text-transparent mb-4">
           VivaGuru
         </h1>
-        <p className="text-xl sm:text-2xl font-medium text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Master Every Interview with Confidence.
+        <p className="text-lg sm:text-xl md:text-2xl font-medium text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Built for your next interview
         </p>
-        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
+        <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
           AI-powered interview preparation tailored to your role, skills, and experience level.
         </p>
-      </motion.div>
-
-      {/* Name Input — above upload card */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.15 }}
-        className="w-full max-w-xl mb-5"
-      >
-        <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 text-left">
-          Your Name
-        </label>
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter your full name"
-          className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-darkbg-border bg-white dark:bg-darkbg-card text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 dark:focus:ring-primary/30 focus:border-primary transition-all duration-200 shadow-sm"
-        />
       </motion.div>
 
       {/* Upload card */}
@@ -150,7 +153,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF })
           onDragOver={handleDrag}
           onDragLeave={handleDrag}
           onDrop={handleDrop}
-          className={`glass-premium p-10 rounded-vivaguru border-2 border-dashed transition-all duration-300 relative ${
+          className={`glass-premium p-6 sm:p-10 rounded-vivaguru border-2 border-dashed transition-all duration-300 relative ${
             dragActive 
               ? 'border-primary bg-primary/5 shadow-xl scale-[1.02]' 
               : status === 'error'

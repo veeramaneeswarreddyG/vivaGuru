@@ -58,7 +58,7 @@ export default function DifficultySelector({ onSelect, currentDifficulty = 'Medi
           Select Answer Depth
         </h2>
         <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
-          Calibrate VivaGuru's mentoring response patterns to match your target interview level.
+          Calibrate VivaGuru's preparation response patterns to match your target interview level.
         </p>
       </motion.div>
 

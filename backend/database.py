@@ -68,6 +68,16 @@ def init_db():
     )
     """)
     
+    # Create users table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        email TEXT PRIMARY KEY,
+        username TEXT,
+        password TEXT,
+        created_at TEXT
+    )
+    """)
+    
     conn.commit()
     conn.close()
 
@@ -221,6 +231,33 @@ def get_recommendations(session_id):
         d["skills"] = json.loads(d["skills"])
         d["preparation_areas"] = json.loads(d["preparation_areas"])
         return d
+    return None
+
+def create_user(email, username, password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO users (email, username, password, created_at) VALUES (?, ?, ?, ?)",
+            (email, username, password, datetime.now().isoformat())
+        )
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+def authenticate_user(email, password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    row = cursor.execute(
+        "SELECT email, username FROM users WHERE email = ? AND password = ?",
+        (email, password)
+    ).fetchone()
+    conn.close()
+    if row:
+        return {"email": row["email"], "username": row["username"]}
     return None
 
 # Initialize on import
