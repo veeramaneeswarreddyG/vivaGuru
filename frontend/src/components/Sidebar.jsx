@@ -3,6 +3,7 @@ import {
   Plus, Sun, Moon, MessageSquare, HelpCircle, BookOpen, 
   GraduationCap, CheckSquare, X, LogOut, ChevronLeft, ChevronRight
 } from 'lucide-react';
+import Logo from './Logo';
 
 export default function Sidebar({ 
   currentView, 
@@ -52,9 +53,9 @@ export default function Sidebar({
           <div className="flex flex-col items-center gap-4">
             <div 
               onClick={() => onViewChange('welcome')}
-              className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-extrabold text-sm shadow-md cursor-pointer relative group"
+              className="cursor-pointer relative group flex items-center justify-center p-1.5 hover:bg-slate-200 dark:hover:bg-darkbg-hover rounded-xl transition-colors duration-200"
             >
-              VG
+              <Logo size="sm" />
               <div className="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-30">
                 VivaGuru Welcome
               </div>
@@ -70,16 +71,14 @@ export default function Sidebar({
           </div>
         ) : (
           <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => onViewChange('welcome')}>
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-sm shadow-md">
-                VG
-              </div>
+            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => onViewChange('welcome')}>
+              <Logo size="sm" />
               <div>
                 <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100">
                   VivaGuru
                 </span>
-                <span className="text-[9px] block text-primary font-bold uppercase tracking-wider -mt-1">
-                  AI Prep
+                <span className="text-[9px] block text-primary dark:text-primary-light font-bold uppercase tracking-wider -mt-0.5 whitespace-nowrap">
+                  Built for your next interview
                 </span>
               </div>
             </div>

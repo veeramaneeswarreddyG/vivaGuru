@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut, Sparkles } from 'lucide-react';
+import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
+import Logo from './Logo';
 
 export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, userName = '', onSignOut }) {
   const [dragActive, setDragActive] = useState(false);
@@ -95,14 +96,12 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
   };
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-4xl mx-auto min-h-[80vh] px-4 py-8 pt-16 sm:pt-20 sm:px-6 text-center select-none relative w-full">
+    <div className="w-full min-h-full flex flex-col items-center justify-start bg-transparent relative select-none">
       
-      {/* Top Header inside WelcomeScreen */}
-      <div className="absolute top-0 left-0 right-0 flex items-center justify-between w-full z-10 px-4 py-3 select-none">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-sm shadow-md">
-            VG
-          </div>
+      {/* Top Header Navigation - stretches completely across screen */}
+      <header className="w-full border-b border-slate-200/50 dark:border-darkbg-border/30 bg-white/30 dark:bg-[#131314]/35 backdrop-blur-md z-30 px-6 py-4 flex items-center justify-between select-none">
+        <div className="flex items-center gap-2.5">
+          <Logo size="sm" />
           <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100">
             VivaGuru
           </span>
@@ -114,36 +113,28 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           {onSignOut && (
             <button
               onClick={onSignOut}
-              className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-350 dark:border-darkbg-border hover:bg-slate-100 dark:hover:bg-darkbg-hover rounded-xl text-xs font-bold text-red-500 dark:text-red-400 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-350 dark:border-darkbg-border/60 hover:bg-slate-100 dark:hover:bg-darkbg-hover rounded-xl text-xs font-bold text-red-500 dark:text-red-400 transition-all cursor-pointer hover:border-red-300 dark:hover:border-red-900/30"
             >
               <LogOut className="w-3.5 h-3.5 text-red-500" />
               <span>Sign Out</span>
             </button>
           )}
         </div>
-      </div>
+      </header>
 
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="mb-8 flex flex-col items-center"
-      >
-        <motion.div 
-          animate={{ 
-            rotate: [0, 8, -8, 0],
-            scale: [1, 1.05, 0.95, 1]
-          }}
-          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-          className="mb-3 text-secondary dark:text-secondary-light p-2 bg-secondary/10 rounded-2xl shadow-inner"
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-4 py-8 sm:px-6 text-center z-10 pt-10 sm:pt-14">
+        
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mb-8 flex flex-col items-center"
         >
-          <Sparkles className="w-8 h-8" />
-        </motion.div>
-
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-indigo-500 bg-clip-text text-transparent mb-3">
-          VivaGuru
-        </h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-indigo-500 bg-clip-text text-transparent mb-3">
+            VivaGuru
+          </h1>
         <p className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-200 max-w-2xl mx-auto leading-normal">
           Built for your next interview
         </p>
@@ -334,6 +325,8 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           Continue Without Job Description
         </motion.button>
       )}
+      </div>
     </div>
   );
 }
+

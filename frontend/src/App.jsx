@@ -10,6 +10,7 @@ import MockScreen from './components/MockScreen';
 import ReviewScreen from './components/ReviewScreen';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoginScreen from './components/LoginScreen';
+import Logo from './components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, Plus, Sun, Moon, MessageSquare, 
@@ -360,10 +361,8 @@ export default function App() {
                   >
                     <Menu className="w-5 h-5" />
                   </button>
-                  <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
-                    <span className="w-5 h-5 rounded-md bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-extrabold text-[10px]">
-                      VG
-                    </span>
+                  <span className="font-extrabold text-base tracking-tight text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <Logo size="sm" />
                     VivaGuru
                   </span>
                 </div>

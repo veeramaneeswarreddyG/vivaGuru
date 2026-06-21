@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
+:root {
+  --logo-stop-1: #4F46E5; /* Indigo-600 */
+  --logo-stop-2: #7C3AED; /* Purple-600 */
+  --logo-stop-3: #0891B2; /* Cyan-600 */
+  --logo-spark-fill: #D97706; /* Amber-600 for light mode contrast */
+}
+
+.dark {
+  --logo-stop-1: #818CF8; /* Indigo-400 */
+  --logo-stop-2: #C084FC; /* Purple-400 */
+  --logo-stop-3: #22D3EE; /* Cyan-400 */
+  --logo-spark-fill: #FACC15; /* Yellow-400 for dark mode glow */
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

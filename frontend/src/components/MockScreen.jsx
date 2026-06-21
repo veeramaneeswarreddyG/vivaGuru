@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import VoiceVisualizer from './VoiceVisualizer';
 import SiriOrb from './SiriOrb';
+import Logo from './Logo';
 
 export default function MockScreen({ sessionData }) {
   const { session_id, role } = sessionData;
@@ -136,8 +137,8 @@ export default function MockScreen({ sessionData }) {
             exit={{ opacity: 0, scale: 0.98 }}
             className="gradient-border-card p-5 sm:p-8 rounded-vivaguru glass shadow-xl text-center max-w-xl mx-auto py-8 sm:py-12"
           >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-lg">
-              VG
+            <div className="flex justify-center mb-6">
+              <Logo size="lg" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
               Start Your {role} Mock Interview

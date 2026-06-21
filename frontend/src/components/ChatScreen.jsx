@@ -5,6 +5,7 @@ import {
   GraduationCap, Cpu, AlertTriangle, Lightbulb, Plus
 } from 'lucide-react';
 import VoiceVisualizer from './VoiceVisualizer';
+import Logo from './Logo';
 
 // Helper to parse basic Markdown formatting (bold, inline code, list items, paragraphs, custom VDL highlights, dividers)
 const renderMarkdown = (text) => {
@@ -445,8 +446,8 @@ export default function ChatScreen({
                   className={`flex gap-3 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   {!isUser && (
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mt-1">
-                      VG
+                    <div className="flex-shrink-0 mt-1">
+                      <Logo size="sm" />
                     </div>
                   )}
                   
@@ -536,8 +537,8 @@ export default function ChatScreen({
                 className="flex gap-3 justify-start items-end absolute bottom-24 left-0 z-10"
               >
                 {/* VG Avatar */}
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0 mb-0.5">
-                  VG
+                <div className="flex-shrink-0 mb-0.5">
+                  <Logo size="sm" />
                 </div>
 
                 {/* Google AI style leaf-shaped thinking bubble */}

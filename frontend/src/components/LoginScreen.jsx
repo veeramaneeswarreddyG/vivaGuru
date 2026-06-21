@@ -5,6 +5,7 @@ import {
   Eye, EyeOff, ShieldCheck, Database, Cpu, 
   RefreshCw, CheckCircle2, KeyRound, ExternalLink, HelpCircle
 } from 'lucide-react';
+import Logo from './Logo';
 
 export default function LoginScreen({ onLoginSuccess }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -159,9 +160,7 @@ export default function LoginScreen({ onLoginSuccess }) {
       {/* Top Header */}
       <div className="w-full max-w-md mx-auto flex items-center justify-between mb-8 select-none z-10">
         <div className="flex items-center gap-2.5">
-          <div className="w-8.5 h-8.5 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-extrabold text-sm shadow-md">
-            VG
-          </div>
+          <Logo size="md" />
           <span className="font-extrabold text-lg tracking-tight text-slate-800 dark:text-slate-100">
             VivaGuru
           </span>
