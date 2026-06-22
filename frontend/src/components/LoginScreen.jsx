@@ -176,7 +176,7 @@ export default function LoginScreen({ onLoginSuccess }) {
         
         <div className="glass-premium rounded-vivaguru border border-slate-200/50 dark:border-white/5 shadow-2xl p-6 sm:p-8 bg-white/80 dark:bg-darkbg-card/75 backdrop-blur-2xl relative overflow-hidden">
           {/* Neon Accent Line */}
-          <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-primary to-secondary" />
+          <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-primary" />
 
           {/* Title / Description */}
           <div className="mb-6">
@@ -458,7 +458,7 @@ export default function LoginScreen({ onLoginSuccess }) {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-primary to-secondary hover:opacity-95 active:scale-[0.98] disabled:opacity-50 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-primary/15 transition-all cursor-pointer select-none"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-dark active:scale-[0.98] disabled:opacity-50 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-primary/15 transition-all cursor-pointer select-none"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">

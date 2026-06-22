@@ -44,7 +44,7 @@ export default function AnalysisScreen() {
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             exit={{ opacity: 0, y: -15, filter: 'blur(4px)' }}
             transition={{ duration: 0.6 }}
-            className="text-lg font-semibold tracking-wide bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+            className="text-lg font-semibold tracking-wide text-primary dark:text-primary-light"
           >
             {STATUS_MESSAGES[msgIndex]}
           </motion.p>

@@ -96,8 +96,8 @@ export default function SiriOrb({ state = 'idle', size = 'medium' }) {
   const colors = {
     idle: {
       l1: 'from-primary/40 to-secondary/30',
-      l2: 'from-secondary/30 to-purple-500/20',
-      l3: 'from-indigo-500/30 to-primary/40'
+      l2: 'from-secondary/30 to-primary-light/20',
+      l3: 'from-secondary-light/30 to-primary/40'
     },
     listening: {
       l1: 'from-red-500/50 to-primary/40',
@@ -106,8 +106,8 @@ export default function SiriOrb({ state = 'idle', size = 'medium' }) {
     },
     processing: {
       l1: 'from-primary/50 to-secondary/40',
-      l2: 'from-purple-500/40 to-blue-500/40',
-      l3: 'from-blue-500/30 to-primary/50'
+      l2: 'from-secondary-light/40 to-primary-light/40',
+      l3: 'from-primary-light/30 to-secondary/50'
     },
     speaking: {
       l1: 'from-primary/60 to-secondary/50',

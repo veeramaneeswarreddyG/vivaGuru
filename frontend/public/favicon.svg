@@ -5,17 +5,17 @@
 >
   <style>
     :root {
-      --logo-stop-1: #4F46E5; /* Indigo-600 */
-      --logo-stop-2: #7C3AED; /* Purple-600 */
-      --logo-stop-3: #0891B2; /* Cyan-600 */
-      --logo-spark-fill: #D97706; /* Amber-600 */
+      --logo-stop-1: #2A1B3D; /* Deep Plum */
+      --logo-stop-2: #00A88F; /* Neo-Mint */
+      --logo-stop-3: #40E0D0; /* Bright Mint */
+      --logo-spark-fill: #00A88F; /* Neo-Mint */
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --logo-stop-1: #818CF8; /* Indigo-400 */
-        --logo-stop-2: #C084FC; /* Purple-400 */
-        --logo-stop-3: #22D3EE; /* Cyan-400 */
-        --logo-spark-fill: #FACC15; /* Yellow-400 */
+        --logo-stop-1: #2A1B3D; /* Deep Plum */
+        --logo-stop-2: #40E0D0; /* Bright Mint */
+        --logo-stop-3: #00A88F; /* Neo-Mint */
+        --logo-spark-fill: #40E0D0; /* Bright Mint glow */
       }
     }
   </style>

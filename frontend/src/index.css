@@ -1,17 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --logo-stop-1: #4F46E5; /* Indigo-600 */
-  --logo-stop-2: #7C3AED; /* Purple-600 */
-  --logo-stop-3: #0891B2; /* Cyan-600 */
-  --logo-spark-fill: #D97706; /* Amber-600 for light mode contrast */
+  --logo-color: #2A1B3D; /* Deep Plum in bright mode */
+  --logo-spark-fill: #00A88F; /* Neo-Mint contrast */
+
+  /* Bright Mode: Primary = Deep Plum (42 27 61), Secondary = Neo-Mint (0 168 143) */
+  --color-primary: 42 27 61;
+  --color-primary-dark: 31 20 46;
+  --color-primary-light: 68 46 94;
+
+  --color-secondary: 0 168 143;
+  --color-secondary-dark: 0 128 108;
+  --color-secondary-light: 64 224 208;
 }
 
 .dark {
-  --logo-stop-1: #818CF8; /* Indigo-400 */
-  --logo-stop-2: #C084FC; /* Purple-400 */
-  --logo-stop-3: #22D3EE; /* Cyan-400 */
-  --logo-spark-fill: #FACC15; /* Yellow-400 for dark mode glow */
+  --logo-color: #00A88F; /* Neo-Mint in dark mode */
+  --logo-spark-fill: #40E0D0; /* Bright Mint glow */
+
+  /* Dark Mode: Primary = Neo-Mint (0 168 143), Secondary = Deep Plum (42 27 61) */
+  --color-primary: 0 168 143;
+  --color-primary-dark: 0 128 108;
+  --color-primary-light: 64 224 208;
+
+  --color-secondary: 42 27 61;
+  --color-secondary-dark: 31 20 46;
+  --color-secondary-light: 68 46 94;
 }
 
 @tailwind base;
@@ -117,83 +131,62 @@
 .bg-grid-pattern {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(26, 115, 232, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(26, 115, 232, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgb(var(--color-primary) / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--color-primary) / 0.04) 1px, transparent 1px);
 }
 .dark .bg-grid-pattern {
   background-image: 
-    linear-gradient(to right, rgba(138, 180, 248, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(138, 180, 248, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgb(var(--color-primary) / 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--color-primary) / 0.02) 1px, transparent 1px);
 }
 
-/* Subtle gradient borders for cards */
+/* Subtle borders for cards */
 .gradient-border-card {
   position: relative;
   background: linear-gradient(to bottom, #fff, #fff) padding-box,
-              linear-gradient(to right, rgba(26, 115, 232, 0.15), rgba(168, 127, 251, 0.15)) border-box;
+              linear-gradient(to bottom, rgb(var(--color-primary) / 0.15), rgb(var(--color-primary) / 0.15)) border-box;
   border: 1px solid transparent;
 }
 
 .dark .gradient-border-card {
   background: linear-gradient(to bottom, #1e1f20, #1e1f20) padding-box,
-              linear-gradient(to right, rgba(138, 180, 248, 0.2), rgba(197, 163, 255, 0.2)) border-box;
+              linear-gradient(to bottom, rgb(var(--color-primary) / 0.25), rgb(var(--color-primary) / 0.25)) border-box;
   border: 1px solid transparent;
 }
 
 .gradient-border-card:hover {
   background: linear-gradient(to bottom, #fff, #fff) padding-box,
-              linear-gradient(to right, rgba(26, 115, 232, 0.5), rgba(168, 127, 251, 0.5)) border-box;
+              linear-gradient(to bottom, rgb(var(--color-primary) / 0.4), rgb(var(--color-primary) / 0.4)) border-box;
 }
 
 .dark .gradient-border-card:hover {
   background: linear-gradient(to bottom, #1e1f20, #1e1f20) padding-box,
-              linear-gradient(to right, rgba(138, 180, 248, 0.6), rgba(197, 163, 255, 0.6)) border-box;
+              linear-gradient(to bottom, rgb(var(--color-primary) / 0.65), rgb(var(--color-primary) / 0.65)) border-box;
 }
 
 /* =============================================
    Gradient Text — VivaGuru Brand
    ============================================= */
 .gradient-primary-text {
-  background: linear-gradient(120deg, #1a73e8 0%, #a87ffb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  @apply text-primary dark:text-primary-light;
 }
 
 /* =============================================
    Google AI / Gemini Style - Thinking Bubble
    ============================================= */
 
-/* Rotating gradient border for the Google AI pill search bar */
-@keyframes google-border-spin {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* The outer wrapper creates the gradient border using padding-box trick */
+/* The outer wrapper creates the border using padding-box trick */
 .google-ai-input-wrapper {
   position: relative;
   border-radius: 9999px;
   padding: 1px;
-  background: linear-gradient(
-    270deg,
-    #1a73e8,
-    #a87ffb,
-    #8b5cf6,
-    #1557b0,
-    #c5a3ff,
-    #1a73e8
-  );
-  background-size: 300% 300%;
-  animation: google-border-spin 12s ease infinite;
+  @apply bg-primary dark:bg-primary-light;
   box-shadow: none;
   transition: box-shadow 0.5s;
 }
 
 .google-ai-input-wrapper:focus-within {
-  box-shadow: 0 0 10px 1px rgba(26, 115, 232, 0.10);
-  animation: google-border-spin 8s ease infinite;
+  box-shadow: 0 0 10px 1px rgb(var(--color-primary) / 0.25);
 }
 
 .google-ai-input-inner {
@@ -206,27 +199,11 @@
    Google AI Thinking Bubble
    ============================================= */
 
-/* Outer glow wrapper with animated gradient border */
-@keyframes bubble-border-spin {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 .google-ai-thinking-wrapper {
   position: relative;
   border-radius: 4px 22px 22px 22px;
   padding: 1px;
-  background: linear-gradient(
-    270deg,
-    #1a73e8,
-    #a87ffb,
-    #8b5cf6,
-    #1557b0,
-    #1a73e8
-  );
-  background-size: 300% 300%;
-  animation: bubble-border-spin 12s ease infinite;
+  @apply bg-primary dark:bg-primary-light;
   box-shadow: none;
 }
 
@@ -256,13 +233,13 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #1a73e8;
+  background: #00A88F;
   animation: ai-dot-pulse 1.4s ease-in-out infinite;
 }
 
 /* In dark mode the bubble bg is dark, so dots should be lighter */
 .dark .ai-dot {
-  background: #8ab4f8;
+  background: #40E0D0;
 }
 
 .ai-dot:nth-child(1) { animation-delay: 0s; }

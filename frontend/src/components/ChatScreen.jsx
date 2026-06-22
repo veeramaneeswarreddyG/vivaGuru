@@ -338,7 +338,7 @@ export default function ChatScreen({
                   onClick={() => setShowVoice(!showVoice)}
                   className={`flex-shrink-0 p-2 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer ${
                     showVoice
-                      ? 'text-[#4285f4] dark:text-[#8ab4f8]'
+                      ? 'text-primary dark:text-primary-light'
                       : 'text-slate-500 dark:text-slate-400'
                   }`}
                   title="Voice input"
@@ -355,7 +355,7 @@ export default function ChatScreen({
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.7 }}
                       transition={{ duration: 0.18 }}
-                      className="flex-shrink-0 w-8 h-8 rounded-full bg-[#4285f4] hover:bg-[#3367d6] flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-primary hover:bg-primary-dark flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
                       title="Send"
                     >
                       <Send className="w-3.5 h-3.5" />
@@ -368,10 +368,10 @@ export default function ChatScreen({
             {/* Google AI style Suggestion Prompts */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl w-full mt-10 select-none">
               {[
-                { text: "Simulate a mock behavioral round", desc: "Practice behavioral questions using the STAR method.", icon: GraduationCap, color: "text-[#4285F4]" },
-                { text: "Explain coding interview patterns", desc: "Overview of Sliding Window, Two Pointers, and DFS/BFS.", icon: Cpu, color: "text-[#a87ffb]" },
-                { text: "Help me analyze a target job description", desc: "Upload a PDF or paste text to calibrate preparation metrics.", icon: BookOpen, color: "text-[#34A853]" },
-                { text: "Give me tips for system design rounds", desc: "Best practices for scalability, databases, and rate limiting.", icon: Lightbulb, color: "text-[#FBBC05]" }
+                { text: "Simulate a mock behavioral round", desc: "Practice behavioral questions using the STAR method.", icon: GraduationCap, color: "text-[#00A88F]" },
+                { text: "Explain coding interview patterns", desc: "Overview of Sliding Window, Two Pointers, and DFS/BFS.", icon: Cpu, color: "text-[#2A1B3D]" },
+                { text: "Help me analyze a target job description", desc: "Upload a PDF or paste text to calibrate preparation metrics.", icon: BookOpen, color: "text-[#40E0D0]" },
+                { text: "Give me tips for system design rounds", desc: "Best practices for scalability, databases, and rate limiting.", icon: Lightbulb, color: "text-[#00A88F]" }
               ].map((chip, idx) => {
                 const ChipIcon = chip.icon;
                 return (
@@ -616,7 +616,7 @@ export default function ChatScreen({
                   onClick={() => setShowVoice(!showVoice)}
                   className={`flex-shrink-0 p-2 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer ${
                     showVoice
-                      ? 'text-[#4285f4] dark:text-[#8ab4f8]'
+                      ? 'text-primary dark:text-primary-light'
                       : 'text-slate-500 dark:text-slate-400'
                   }`}
                   title="Voice input"
@@ -634,7 +634,7 @@ export default function ChatScreen({
                       exit={{ opacity: 0, scale: 0.7 }}
                       transition={{ duration: 0.18 }}
                       disabled={isLoading}
-                      className="flex-shrink-0 w-8 h-8 rounded-full bg-[#4285f4] hover:bg-[#3367d6] disabled:bg-slate-300 dark:disabled:bg-slate-700 flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-primary hover:bg-primary-dark disabled:bg-slate-300 dark:disabled:bg-slate-700 flex items-center justify-center text-white shadow-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
                       title="Send"
                     >
                       <Send className="w-3.5 h-3.5" />

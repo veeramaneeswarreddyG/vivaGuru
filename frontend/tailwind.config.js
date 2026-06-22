@@ -9,14 +9,14 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#1a73e8',  // Google Blue (Gmail/Workspace Blue)
-          dark: '#1557b0',     // Gmail dark hover blue
-          light: '#8ab4f8'     // Google AI/Gemini dark mode blue
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+          dark: 'rgb(var(--color-primary-dark) / <alpha-value>)',
+          light: 'rgb(var(--color-primary-light) / <alpha-value>)'
         },
         secondary: {
-          DEFAULT: '#a87ffb',  // Gemini purple
-          dark: '#8b5cf6',     // Darker purple
-          light: '#c5a3ff'     // Light purple
+          DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
+          dark: 'rgb(var(--color-secondary-dark) / <alpha-value>)',
+          light: 'rgb(var(--color-secondary-light) / <alpha-value>)'
         },
         success: {
           DEFAULT: '#137333',  // Google Green (Gmail style)

@@ -132,7 +132,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           transition={{ duration: 0.8 }}
           className="mb-8 flex flex-col items-center"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-indigo-500 bg-clip-text text-transparent mb-3">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-primary dark:text-primary-light mb-3">
             VivaGuru
           </h1>
         <p className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-200 max-w-2xl mx-auto leading-normal">
@@ -164,7 +164,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
           }`}
         >
           {/* Top colored line like Google cards */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#4285F4] via-[#a87ffb] to-[#34A853]" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary" />
 
           <input
             ref={fileInputRef}
@@ -176,7 +176,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
 
           {status === 'empty' && (
             <div className="flex flex-col items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-[#4285f4]/15 flex items-center justify-center text-primary dark:text-[#8ab4f8] mb-4 shadow-inner">
+              <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/15 flex items-center justify-center text-primary dark:text-primary-light mb-4 shadow-inner">
                 <UploadCloud className="w-8 h-8 animate-pulse" />
               </div>
               <p className="text-base font-bold text-slate-800 dark:text-slate-200">
@@ -214,7 +214,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-md transition-all duration-200 flex items-center gap-1.5 hover:scale-[1.02] cursor-pointer"
+                  className="px-5 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold shadow-md transition-all duration-200 flex items-center gap-1.5 hover:scale-[1.02] cursor-pointer"
                 >
                   Start AI Analysis
                   <ArrowRight className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
                   viewBox="0 0 100 100"
                 >
                   <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="30 25" />
-                  <circle cx="94" cy="50" r="4.5" className="fill-[#4285F4] dark:fill-[#8ab4f8]" />
+                  <circle cx="94" cy="50" r="4.5" className="fill-primary dark:fill-primary-light" />
                 </motion.svg>
 
                 {/* Counter-rotating Inner Red/Yellow Orbit */}

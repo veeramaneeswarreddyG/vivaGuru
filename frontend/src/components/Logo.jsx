@@ -17,12 +17,6 @@ export default function Logo({ size = 'md', className = '' }) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Dynamic Indigo to Purple to Cyan gradient using CSS variables */}
-          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--logo-stop-1, #6366F1)" />
-            <stop offset="50%" stopColor="var(--logo-stop-2, #A855F7)" />
-            <stop offset="100%" stopColor="var(--logo-stop-3, #06B6D4)" />
-          </linearGradient>
           {/* Subtle drop shadow/glow for the spark */}
           <filter id="logoGlow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -35,12 +29,12 @@ export default function Logo({ size = 'md', className = '' }) {
           cx="50" 
           cy="50" 
           r="38" 
-          stroke="url(#logoGrad)" 
+          stroke="var(--logo-color, #00A88F)" 
           strokeWidth="8.5" 
         />
 
         {/* Serif-Style Inner V-path matching the brand image */}
-        <g stroke="url(#logoGrad)" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
+        <g stroke="var(--logo-color, #00A88F)" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
           {/* Main V body */}
           <path d="M 32,32 L 50,70 L 68,32" />
           {/* Left serif cap */}
@@ -52,7 +46,7 @@ export default function Logo({ size = 'md', className = '' }) {
         {/* Central wisdom spark (Gemini-style four-pointed star) */}
         <path 
           d="M 50,17 Q 50,25 58,25 Q 50,25 50,33 Q 50,25 42,25 Q 50,25 50,17 Z" 
-          fill="var(--logo-spark-fill, #FBBC05)" 
+          fill="var(--logo-spark-fill, #00A88F)" 
           filter="url(#logoGlow)"
         />
       </svg>
