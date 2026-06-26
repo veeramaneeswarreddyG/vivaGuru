@@ -23,7 +23,7 @@ export default function ReviewScreen({ sessionData, recommendations }) {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/review/submit', {
+      const response = await fetch('http://127.0.0.1:8001/api/review/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: question.trim(), answer: answerText.trim() })

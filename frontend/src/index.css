@@ -2,16 +2,16 @@
 
 :root {
   --logo-color: #2A1B3D; /* Deep Plum in bright mode */
-  --logo-spark-fill: #00A88F; /* Neo-Mint contrast */
+  --logo-spark-fill: #442E5E; /* Lighter Plum contrast */
 
-  /* Bright Mode: Primary = Deep Plum (42 27 61), Secondary = Neo-Mint (0 168 143) */
+  /* Bright Mode: Primary = Deep Plum (42 27 61), Secondary = Lighter Plum (68 46 94) */
   --color-primary: 42 27 61;
   --color-primary-dark: 31 20 46;
   --color-primary-light: 68 46 94;
 
-  --color-secondary: 0 168 143;
-  --color-secondary-dark: 0 128 108;
-  --color-secondary-light: 64 224 208;
+  --color-secondary: 68 46 94;
+  --color-secondary-dark: 42 27 61;
+  --color-secondary-light: 108 78 143;
 }
 
 .dark {

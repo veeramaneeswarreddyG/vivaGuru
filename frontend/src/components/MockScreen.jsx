@@ -29,7 +29,7 @@ export default function MockScreen({ sessionData }) {
     setIsLoading(true);
     setLoadingMsg('Preparing mock profile...');
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/mock/start', {
+      const response = await fetch('http://127.0.0.1:8001/api/mock/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id })
@@ -55,7 +55,7 @@ export default function MockScreen({ sessionData }) {
     setGameState('evaluating');
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/mock/submit', {
+      const response = await fetch('http://127.0.0.1:8001/api/mock/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id, answer: answerText.trim() })

@@ -219,7 +219,18 @@ export default function ChatScreen({
   const [showVoice, setShowVoice] = useState(false);
   
   const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
   const textareaRef = useRef(null);
+
+  // Helper to scroll to bottom
+  const scrollToBottom = (behavior = 'smooth') => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior
+      });
+    }
+  };
 
   // Auto-expand textarea
   useEffect(() => {
@@ -231,8 +242,33 @@ export default function ChatScreen({
 
   // Scroll to bottom on new messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+    scrollToBottom('smooth');
+    const t1 = setTimeout(() => scrollToBottom('smooth'), 50);
+    const t2 = setTimeout(() => scrollToBottom('smooth'), 150);
+    const t3 = setTimeout(() => scrollToBottom('smooth'), 300);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [messages.length, isLoading]);
+
+  // Monitor size changes (like accordion opening/closing) to adjust scroll dynamically
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      const threshold = 220; // px
+      const isCloseToBottom = container.scrollHeight - container.scrollTop - container.clientHeight <= threshold;
+      if (isCloseToBottom) {
+        scrollToBottom('smooth');
+      }
+    });
+
+    resizeObserver.observe(container);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const handleSubmit = (e) => {
     e?.preventDefault();
@@ -433,7 +469,7 @@ export default function ChatScreen({
         /* Active State: Message List + Bottom Input Bar */
         <div className="flex-1 flex flex-col min-h-0 relative">
           {/* Messages Scroll Area */}
-          <div className="flex-1 overflow-y-auto pr-2 space-y-8 pb-36">
+          <div ref={scrollContainerRef} className="flex-1 overflow-y-auto pr-2 space-y-8 pb-4">
             {messages.map((msg, index) => {
               const isUser = msg.role === 'user';
               
@@ -534,7 +570,7 @@ export default function ChatScreen({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9, y: 8 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
-                className="flex gap-3 justify-start items-end absolute bottom-24 left-0 z-10"
+                className="flex gap-3 sm:gap-4 justify-start items-end mt-2 mb-4 relative z-10"
               >
                 {/* VG Avatar */}
                 <div className="flex-shrink-0 mb-0.5">
@@ -553,7 +589,9 @@ export default function ChatScreen({
             )}
           </AnimatePresence>
 
-          <div ref={messagesEndRef} />
+            {/* Bottom spacer to push content above the absolute search bar */}
+            <div className="h-28 flex-shrink-0" />
+            <div ref={messagesEndRef} />
 
           {/* Voice Recognition Dialog overlay (absolute at bottom when active) */}
           <AnimatePresence>

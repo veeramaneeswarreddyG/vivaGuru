@@ -102,7 +102,7 @@ export default function LoginScreen({ onLoginSuccess }) {
     const payload = isSignUp ? { email, username, password } : { email, password };
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000${endpoint}`, {
+      const response = await fetch(`http://127.0.0.1:8001${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

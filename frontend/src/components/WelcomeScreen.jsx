@@ -77,7 +77,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
 
     try {
       // Direct call to FastAPI backend
-      const response = await fetch('http://127.0.0.1:8000/api/upload-jd', {
+      const response = await fetch('http://127.0.0.1:8001/api/upload-jd', {
         method: 'POST',
         body: formData,
       });
