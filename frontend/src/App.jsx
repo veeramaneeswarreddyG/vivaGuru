@@ -11,6 +11,7 @@ import ReviewScreen from './components/ReviewScreen';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoginScreen from './components/LoginScreen';
 import Logo from './components/Logo';
+import { API_BASE_URL } from './config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, Plus, Sun, Moon, MessageSquare, 
@@ -111,7 +112,7 @@ export default function App() {
       
       // Fetch recommendations and messages from backend
       try {
-        const response = await fetch(`http://127.0.0.1:8001/api/session/${data.session_id}`);
+        const response = await fetch(`${API_BASE_URL}/api/session/${data.session_id}`);
         if (response.ok) {
           const res = await response.json();
           setRecommendations(res.recommendations);
@@ -136,7 +137,7 @@ export default function App() {
       const formData = new FormData();
       formData.append('text_fallback', ''); // empty triggers general profile fallback
 
-      const response = await fetch('http://127.0.0.1:8001/api/upload-jd', {
+      const response = await fetch(`${API_BASE_URL}/api/upload-jd`, {
         method: 'POST',
         body: formData,
       });
@@ -151,7 +152,7 @@ export default function App() {
         saveSessionToHistory(data);
 
         // Fetch details
-        const detailsResp = await fetch(`http://127.0.0.1:8001/api/session/${data.session_id}`);
+        const detailsResp = await fetch(`${API_BASE_URL}/api/session/${data.session_id}`);
         if (detailsResp.ok) {
           const res = await detailsResp.json();
           setRecommendations(res.recommendations);
@@ -174,7 +175,7 @@ export default function App() {
     setSessionData(updatedSession);
 
     try {
-      await fetch(`http://127.0.0.1:8001/api/session/${sessionData.session_id}/difficulty`, {
+      await fetch(`${API_BASE_URL}/api/session/${sessionData.session_id}/difficulty`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ difficulty: level })
@@ -190,7 +191,7 @@ export default function App() {
 
   const handleLoadSession = async (session_id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8001/api/session/${session_id}`);
+      const response = await fetch(`${API_BASE_URL}/api/session/${session_id}`);
       if (response.ok) {
         const res = await response.json();
         setSessionData(res.session);
@@ -229,7 +230,7 @@ export default function App() {
     }, 1500);
 
     try {
-      const response = await fetch('http://127.0.0.1:8001/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: sessionData.session_id, message: text })

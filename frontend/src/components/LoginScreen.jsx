@@ -6,6 +6,7 @@ import {
   RefreshCw, CheckCircle2, KeyRound, ExternalLink, HelpCircle
 } from 'lucide-react';
 import Logo from './Logo';
+import { API_BASE_URL } from '../config';
 
 export default function LoginScreen({ onLoginSuccess }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -102,7 +103,7 @@ export default function LoginScreen({ onLoginSuccess }) {
     const payload = isSignUp ? { email, username, password } : { email, password };
 
     try {
-      const response = await fetch(`http://127.0.0.1:8001${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

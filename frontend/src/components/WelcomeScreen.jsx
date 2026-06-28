@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { UploadCloud, FileText, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
 import Logo from './Logo';
+import { API_BASE_URL } from '../config';
 
 export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, userName = '', onSignOut }) {
   const [dragActive, setDragActive] = useState(false);
@@ -77,7 +78,7 @@ export default function WelcomeScreen({ onUploadSuccess, onContinueWithoutPDF, u
 
     try {
       // Direct call to FastAPI backend
-      const response = await fetch('http://127.0.0.1:8001/api/upload-jd', {
+      const response = await fetch(`${API_BASE_URL}/api/upload-jd`, {
         method: 'POST',
         body: formData,
       });
