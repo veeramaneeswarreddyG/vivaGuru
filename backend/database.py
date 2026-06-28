@@ -3,7 +3,10 @@ import json
 import os
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "vivaguru.db")
+if os.environ.get("VERCEL"):
+    DB_PATH = "/tmp/vivaguru.db"
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), "vivaguru.db")
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)

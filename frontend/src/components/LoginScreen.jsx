@@ -109,11 +109,18 @@ export default function LoginScreen({ onLoginSuccess }) {
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed');
+        let errorMsg = 'Authentication failed';
+        try {
+          const data = await response.json();
+          errorMsg = data.error || errorMsg;
+        } catch (_) {
+          errorMsg = `Server error (${response.status}): The database or server configuration might be incorrect.`;
+        }
+        throw new Error(errorMsg);
       }
+
+      const data = await response.json();
 
       if (isSignUp) {
         setSuccessMsg('Neural profile instantiated! You can now log in.');
