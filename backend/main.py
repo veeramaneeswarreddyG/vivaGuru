@@ -15,10 +15,17 @@ import nlp_engine as nlp
 app = Flask(__name__)
 CORS(app) # Enable CORS for frontend development
 
-if os.environ.get("VERCEL"):
-    TEMP_UPLOAD_DIR = "/tmp/temp_uploads"
-else:
-    TEMP_UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "temp_uploads")
+def get_temp_upload_dir():
+    base_dir = os.path.dirname(__file__)
+    test_dir = os.path.join(base_dir, ".write_test_dir")
+    try:
+        os.makedirs(test_dir, exist_ok=True)
+        os.rmdir(test_dir)
+        return os.path.join(base_dir, "temp_uploads")
+    except (IOError, OSError):
+        return "/tmp/temp_uploads"
+
+TEMP_UPLOAD_DIR = get_temp_upload_dir()
 os.makedirs(TEMP_UPLOAD_DIR, exist_ok=True)
 
 @app.route("/api/upload-jd", methods=["POST"])
